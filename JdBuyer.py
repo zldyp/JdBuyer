@@ -77,38 +77,38 @@ class Buyer(object):
         timer.start()
 
         while True:
-            try:
-                if not self.session.getItemStock(skuId, skuNum, areaId):
-                    logger.info('不满足下单条件，{0}s后进行下一次查询'.format(stockInterval))
-                else:
-                    logger.info('{0} 满足下单条件，开始执行'.format(skuId))
-                    if self.session.trySubmitOrder(skuId, skuNum, areaId, submitRetry, submitInterval):
-                        logger.info('下单成功')
-                        if self.enableWx:
-                            send_wechat(
-                                message='JdBuyerApp', desp='您的商品已下单成功，请及时支付订单', sckey=self.scKey)
-                        return
-            except Exception as e:
-                logger.error(e)
+            # try:
+            if not self.session.getItemStock(skuId, skuNum, areaId):
+                logger.info('不满足下单条件，{0}s后进行下一次查询'.format(stockInterval))
+            else:
+                logger.info('{0} 满足下单条件，开始执行'.format(skuId))
+                if self.session.trySubmitOrder(skuId, skuNum, areaId, submitRetry, submitInterval):
+                    logger.info('下单成功')
+                    if self.enableWx:
+                        send_wechat(
+                            message='JdBuyerApp', desp='您的商品已下单成功，请及时支付订单', sckey=self.scKey)
+                    return
+            # except Exception as e:
+            #     logger.error(e)
             time.sleep(stockInterval)
 
 
 if __name__ == '__main__':
 
     # 商品sku
-    skuId = '100015253059'
+    skuId = "100055452449" #''
     # 区域id(可根据工程 area_id 目录查找)
-    areaId = '1_2901_55554_0'
+    areaId = '22_1930_49322_49423'
     # 购买数量
     skuNum = 1
     # 库存查询间隔(秒)
-    stockInterval = 3
+    stockInterval = 2
     # 监听库存后尝试下单次数
     submitRetry = 3
     # 下单尝试间隔(秒)
     submitInterval = 5
     # 程序开始执行时间(晚于当前时间立即执行，适用于定时抢购类)
-    buyTime = '2022-10-10 00:00:00'
+    buyTime = '2023-4-22 09:58:00'
 
     buyer = Buyer()  # 初始化
     buyer.loginByQrCode()
